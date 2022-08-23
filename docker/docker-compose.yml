@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  notifications_api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+
+  nginx:
+    build: ../nginx
+    depends_on:
+      - notifications_api

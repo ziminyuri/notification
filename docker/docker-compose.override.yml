@@ -1,0 +1,9 @@
+version: '3'
+services:
+  notifications_api:
+    ports:
+      - "8007:8007"
+
+  nginx:
+    ports:
+      - "80:80"
