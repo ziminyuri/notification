@@ -1,0 +1,67 @@
+name: notification
+
+on:
+  pull_request:
+    branches: [ master]
+
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Create folders for report
+        run: |
+          mkdir -p reports/flake8
+          mkdir -p reports/mypy
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install lxml==4.9.0
+          pip install mypy==0.961
+          pip install flake8-html==0.4.2
+          pip install wemake-python-styleguide==0.16.1
+
+      - name: Lint with flake8
+        run: |
+          flake8 --format=html --htmldir=report_flake_${{ matrix.python-version }}/
+      - name: Lint with mypy
+        run: |
+          mypy . --ignore-missing-imports --html-report reports/mypy/
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: reports
+          path: report_*/
+
+  send_message:
+    runs-on: ubuntu-latest
+    if: always()
+    needs: build
+    steps:
+      - name: send message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: html
+          message: |
+            <b>Report</b>: ${{ github.workflow }} 
+            <b>Repo</b>: <a href="https://github.com/${{github.repository}}">${{github.repository}}</a>
+            <b>Event</b>: ${{ github.event_name }}
+            <b>Status</b>: ${{ needs.build.result }}
+            <b>View</b>: <a href="https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}">click</a>
