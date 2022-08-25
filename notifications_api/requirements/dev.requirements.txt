@@ -107,6 +107,8 @@ pep517==0.13.0
     # via pip-tools
 pep8-naming==0.11.1
     # via wemake-python-styleguide
+pika==1.3.0
+    # via -r dev.requirements.in
 pip-tools==6.5.1
     # via -r dev.requirements.in
 platformdirs==2.5.2
