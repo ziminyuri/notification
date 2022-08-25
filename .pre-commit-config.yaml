@@ -1,0 +1,23 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    -   id: end-of-file-fixer
+    -   id: trailing-whitespace
+    -   id: detect-private-key
+    -   id: double-quote-string-fixer
+
+-   repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: 'v1.6.0'
+    hooks:
+    -   id: autopep8
+
+-   repo: local
+    hooks:
+    -   id: flake8
+        name: flake8
+        description: wemake-python-styleguide enforcement
+        entry: flake8
+        args: ["--config=setup.cfg"]
+        language: python
+        types: [python]
