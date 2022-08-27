@@ -1,22 +1,37 @@
+from ckeditor.fields import RichTextField
 from django.db import models
-from django.db.models import JSONField
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
+
+
+class Channel(models.TextChoices):
+
+    email = "email", _("email")
+    sms = "sms", _("sms")
+
+
+class TimeStampedMixin(models.Model):
+    """Mixin to extend class models with date fields create and modified."""
+
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
 
 
 class TemplateType(models.TextChoices):
 
-    common = 'common', 'Обычное письмо'
-    personal_statistic = 'personal_statistic', 'Персональная статистика'
+    common = 'common', _('Обычное письмо')
+    personal_statistic = 'personal_statistic', _('Персональная статистика')
 
 
-class Template(models.Model):
-    title = models.CharField('Наименование', max_length=250)
-    type = models.CharField('Тип', choices=TemplateType.choices, max_length=50)
-    template = models.TextField('Шаблон')
-    subject = models.TextField('Тема', blank=True, null=True)
-
-    created_at = models.DateTimeField(editable=False)
-    updated_at = models.DateTimeField(editable=False)
+class Template(TimeStampedMixin):
+    title = models.CharField(_('Наименование'), max_length=250)
+    type = models.CharField(_('Тип'), choices=TemplateType.choices, max_length=50)
+    template = RichTextField(_('Шаблон'))
+    subject = models.TextField(_('Тема'), blank=True, null=True)
+    channel = models.TextField(_("Cпособ передачи"), choices=Channel.choices, max_length=8)
 
     def save(self, *args, **kwargs):
         if not self.id:
@@ -34,18 +49,18 @@ class Template(models.Model):
 
 
 class Status(models.TextChoices):
-    waiting = 'waiting', 'Ожидает отправки'
-    done = 'done', 'Отправлено'
-    cancelled = 'cancelled', 'Отменено'
+    waiting = 'waiting', _('Ожидает отправки')
+    done = 'done', _('Отправлено')
+    cancelled = 'cancelled', _('Отменено')
 
 
 class Priority(models.TextChoices):
-    high = 'high', 'Высокий'
-    medium = 'medium', 'Средний'
-    low = 'low', 'Низкий'
+    high = 'high', _('Высокий')
+    medium = 'medium', _('Средний')
+    low = 'low', _('Низкий')
 
 
-class MailTask(models.Model):
+class MailTask(TimeStampedMixin):
     status = models.CharField(
         max_length=250,
         choices=Status.choices,
@@ -58,13 +73,9 @@ class MailTask(models.Model):
         default=Priority.low
     )
     template = models.ForeignKey(Template, on_delete=models.SET_NULL, null=True)
-    context = JSONField(default={})
 
     scheduled_datetime = models.DateTimeField(blank=True, null=True)
     execution_datetime = models.DateTimeField(blank=True, null=True)
-
-    created_at = models.DateTimeField(editable=False)
-    updated_at = models.DateTimeField(editable=False)
 
     def save(self, *args, **kwargs):
         if not self.id:

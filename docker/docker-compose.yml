@@ -10,6 +10,7 @@ services:
     build: ../nginx
     depends_on:
       - notifications_api
+      - admin
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -20,3 +21,28 @@ services:
     volumes:
         - ./rabbitmq/data/:/var/lib/rabbitmq/
         - ./rabbitmq/log/:/var/log/rabbitmq
+
+  admin:
+    container_name: 'notification-admin'
+    build: ../admin
+    env_file:
+      - ../admin/.env
+    depends_on:
+      - db
+    ports:
+      - '8000:8000'
+
+
+  db:
+    image: postgres:13.0-alpine
+    container_name: 'notification-db'
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ../admin/.env
+    ports:
+      - '5432:5432'
+
+volumes:
+  postgres_data:
