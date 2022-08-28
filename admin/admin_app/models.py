@@ -60,6 +60,13 @@ class Priority(models.TextChoices):
     low = 'low', _('Низкий')
 
 
+class CategoryUsers(models.Model):
+    name = models.CharField(max_length=250)
+
+    def __str__(self):
+        return self.name
+
+
 class MailTask(TimeStampedMixin):
     status = models.CharField(
         max_length=250,
@@ -73,6 +80,7 @@ class MailTask(TimeStampedMixin):
         default=Priority.low
     )
     template = models.ForeignKey(Template, on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(CategoryUsers, on_delete=models.SET_NULL, null=True, blank=True)
 
     scheduled_datetime = models.DateTimeField(blank=True, null=True)
     execution_datetime = models.DateTimeField(blank=True, null=True)
