@@ -16,8 +16,13 @@ class RabbitMQProducer:
     def create_queue(self, queue_name: str):
         self.channel.queue_declare(queue=queue_name)
 
-    def send_message_to_queue(self, message: str, queue_name: str):
-        self.channel.basic_publish(exchange='', routing_key=queue_name, body=message)
+    def send_message_to_queue(self, message: str, queue_name: str, ttl_hours: int = 12):
+        ttl_millisecs = ttl_hours * 60 * 60 * 1000
+        self.channel.basic_publish(
+            exchange='',
+            routing_key=queue_name,
+            properties=pika.BasicProperties(expiration=str(ttl_millisecs)),
+            body=message)
 
 
 @lru_cache

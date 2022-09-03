@@ -17,7 +17,7 @@ class EmailNotificationsService:
 
     def send_email_to_queue(self, email: Email) -> None:
         queue_name = self.EMAIL_PRIORITY_TO_QUEUE[email.notification_priority].value
-        self.mq_producer.send_message_to_queue(message=email.json(), queue_name=queue_name)
+        self.mq_producer.send_message_to_queue(message=email.json(), queue_name=queue_name, ttl_hours=email.notification_lifetime_hours)
 
 
 @lru_cache
