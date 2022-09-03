@@ -8,9 +8,7 @@ RUN pip install --upgrade pip
 COPY ./requirements/prod.requirements.txt .
 RUN pip install -r prod.requirements.txt
 
-EXPOSE 8007
-
 COPY . .
 WORKDIR /usr/app/src
 
-CMD ["gunicorn", "main:app", "--bind", "0.0.0.0:8007", "-k", "uvicorn.workers.UvicornWorker", "--workers", "2"]
+CMD ["python", "main.py"]

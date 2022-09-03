@@ -8,6 +8,15 @@ services:
     environment:
       - RABBITMQ_HOST=rabbitmq
 
+  notifications_service:
+    build:
+      context: ../notifications_service
+      dockerfile: Dockerfile
+    environment:
+      - RABBITMQ_HOST=rabbitmq
+      - EMAIL_GMAIL_USERNAME=
+      - EMAIL_GMAIL_PASSWORD=
+
   nginx:
     build: ../nginx
     depends_on:
