@@ -4,6 +4,11 @@ services:
     ports:
       - "8007:8007"
 
+  rabbitmq:
+    ports:
+      - 5672:5672
+      - 15672:15672
+
   nginx:
     ports:
       - "80:80"
