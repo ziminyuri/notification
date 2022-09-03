@@ -13,6 +13,8 @@ attrs==22.1.0
     #   flake8-bugbear
     #   flake8-eradicate
     #   wemake-python-styleguide
+backoff==2.1.2
+    # via -r dev.requirements.in
 bandit==1.7.4
     # via flake8-bandit
 cffi==1.15.1

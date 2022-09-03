@@ -5,6 +5,7 @@ from pydantic import BaseSettings
 
 class RabbitMQSettings(BaseSettings):
     host: str = '127.0.0.1'
+    port: int = 5672
 
     class Config:
         env_prefix = 'RABBITMQ_'

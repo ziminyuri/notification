@@ -1,6 +1,8 @@
 from functools import lru_cache
 
 import pika
+from pika.exceptions import AMQPConnectionError
+import backoff
 
 from core.settings import get_settings, RabbitMQSettings
 
@@ -8,7 +10,7 @@ from core.settings import get_settings, RabbitMQSettings
 class RabbitMQProducer:
     def __init__(self, rabbitmq_settings: RabbitMQSettings):
         self.settings = rabbitmq_settings
-        self.connection = pika.BlockingConnection(pika.ConnectionParameters(self.settings.host))
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters(self.settings.host, self.settings.port))
         self.channel = self.connection.channel()
 
     def create_queue(self, queue_name: str):
@@ -19,5 +21,7 @@ class RabbitMQProducer:
 
 
 @lru_cache
+@backoff.on_exception(backoff.expo,
+                      AMQPConnectionError)
 def get_rabbitmq_producer():
     return RabbitMQProducer(rabbitmq_settings=get_settings().rabbitmq)
