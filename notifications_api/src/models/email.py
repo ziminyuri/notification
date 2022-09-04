@@ -12,6 +12,7 @@ class NotificationPriority(str, Enum):
 class TemplateType(str, Enum):
     stats = 'stats'
     common = 'common'
+    custom = 'custom'
 
 
 class Email(BaseModel):

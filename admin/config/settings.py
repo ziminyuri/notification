@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'admin_app.apps.AdminAppConfig',
+    'django_celery_beat',
 
     'ckeditor'
 ]
@@ -89,3 +90,10 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+GATEWAY_BACKEND_URL = 'http://127.0.0.1:5000'
+
+CELERY_TIMEZONE = "Europe/Moscow"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672'
+
