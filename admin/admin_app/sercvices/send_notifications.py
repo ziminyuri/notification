@@ -1,5 +1,8 @@
-from ..models import MailTask
 import requests
+
+from config.settings import GATEWAY_BACKEND_URL, NOTIFICATION_BACKEND_URL
+
+from ..models import MailTask
 
 
 def process_sending(id):
@@ -16,9 +19,12 @@ def _send_notification(task, emails):
         try:
             batched_emails = emails[:batch]
             payload = _prepare_payload(batched_emails, task)
-            requests.post('http://0.0.0.0:7000/api/v1/notifications/send-email-notification-batched', json=payload)
+            requests.post(
+                f'{NOTIFICATION_BACKEND_URL}/api/v1/notifications/send-email-notification-batched',
+                json=payload
+            )
             return _send_notification(task, emails[batch:])
-        except Exception as e:
+        except Exception:
             return False
 
 
@@ -35,13 +41,14 @@ def _prepare_payload(batched_emails, task):
             "notification_priority": task.priority,
             "notification_lifetime_hours": task.lifetime_hours
         })
+    return payload
 
 
 def _get_emails(category):
     if category == 'Все пользователи':
-        response = requests.get('http://127.0.0.1:5000/api/v1/users')
+        response = requests.get(f'{GATEWAY_BACKEND_URL}/api/v1/users')
     else:
-        response = requests.get(f'http://127.0.0.1:5000/api/v1/role/{category.category_id}/user')
+        response = requests.get(f'{GATEWAY_BACKEND_URL}/api/v1/role/{category.category_id}/user')
     data = response.json()
     return _extract_email(data)
 

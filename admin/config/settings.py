@@ -3,8 +3,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-04%d0wnc2k$_vx_&g#=rx&y1a49@wh9efcq@%d@-icfrwrwgcm'
-# SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = os.environ.get("DEBUG", "True") == "True"
 
@@ -90,10 +89,11 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-GATEWAY_BACKEND_URL = 'http://127.0.0.1:5000'
+GATEWAY_BACKEND_URL = os.getenv('GATEWAY_BACKEND_URL', 'http://127.0.0.1:5000')
+NOTIFICATION_BACKEND_URL = os.getenv('NOTIFICATION_BACKEND_URL', 'http://127.0.0.1:7000')
 
 CELERY_TIMEZONE = "Europe/Moscow"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672'
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'amqp://guest:guest@localhost:5672')
 
