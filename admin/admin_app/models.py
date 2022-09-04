@@ -63,9 +63,14 @@ class Priority(models.TextChoices):
 
 class CategoryUsers(models.Model):
     name = models.CharField(max_length=250)
+    category_id = models.IntegerField()
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = 'Категория пользователей'
+        verbose_name_plural = 'Категории пользователей'
 
 
 class MailTask(TimeStampedMixin):
@@ -82,6 +87,7 @@ class MailTask(TimeStampedMixin):
     )
     template = models.ForeignKey(Template, on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey(CategoryUsers, on_delete=models.SET_NULL, null=True, blank=True)
+    lifetime_hours = models.IntegerField(_('Актуальность сообщения'), default=1)
 
     scheduled_datetime = models.DateTimeField(blank=True, null=True)
     execution_datetime = models.DateTimeField(blank=True, null=True)

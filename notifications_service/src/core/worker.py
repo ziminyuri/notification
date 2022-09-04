@@ -8,7 +8,9 @@ from core.settings import get_settings
 
 TEMPLATE_TYPE_TO_PATH = {
     'common': 'templates/common.html',
-    'stats': 'templates/stats.html'
+    'stats': 'templates/stats.html',
+    'custom': 'templates/custom.html'
+
 }
 
 

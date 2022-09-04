@@ -12,4 +12,4 @@ class Command(BaseCommand):
         response.raise_for_status()
 
         for d in response.json():
-            CategoryUsers.objects.get_or_create(name=d['name'])
+            CategoryUsers.objects.get_or_create(name=d['name'], category_id=d['id'])
