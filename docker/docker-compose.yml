@@ -35,6 +35,8 @@ services:
     build: ../admin
     env_file:
       - ../admin/.env
+    entrypoint:
+      "entrypoint.sh"
     depends_on:
       - db
     ports:

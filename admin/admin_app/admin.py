@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import MailTask, Template, CategoryUsers
+from .models import CategoryUsers, MailTask, Template
 
 
 @admin.register(Template)

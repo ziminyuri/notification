@@ -19,5 +19,4 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 # копируем содержимое текущей папки в контейнер
 COPY . .
-
-CMD ["gunicorn", "-w", "1", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
+COPY ./entrypoint.sh /usr/local/bin

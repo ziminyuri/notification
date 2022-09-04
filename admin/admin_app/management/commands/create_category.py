@@ -1,7 +1,8 @@
-from config.settings import GATEWAY_BACKEND_URL
 import requests
-from admin_app.models import CategoryUsers
 from django.core.management.base import BaseCommand
+
+from admin_app.models import CategoryUsers
+from config.settings import GATEWAY_BACKEND_URL
 
 
 class Command(BaseCommand):

@@ -91,6 +91,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 GATEWAY_BACKEND_URL = 'http://127.0.0.1:5000'
+NOTIFICATION_BACKEND_URL = 'http://127.0.0.1:7000'
 
 CELERY_TIMEZONE = "Europe/Moscow"
 CELERY_TASK_TRACK_STARTED = True
