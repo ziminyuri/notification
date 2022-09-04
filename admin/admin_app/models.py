@@ -50,6 +50,7 @@ class Template(TimeStampedMixin):
 
 class Status(models.TextChoices):
     waiting = 'waiting', _('Ожидает отправки')
+    processing = 'processing', _('В процессе отправки')
     done = 'done', _('Отправлено')
     cancelled = 'cancelled', _('Отменено')
 

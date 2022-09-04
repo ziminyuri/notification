@@ -15,3 +15,5 @@ class AdminAppConfig(AppConfig):
             interval=schedule,
             name='Search mail task'
         )
+
+
